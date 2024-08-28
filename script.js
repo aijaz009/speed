@@ -1,24 +1,28 @@
 document.getElementById('startTest').addEventListener('click', function() {
+    const speedValue = document.getElementById('speedValue');
+    const status = document.getElementById('status');
+    speedValue.innerText = 'Testing...';
+    status.innerText = '';
+
+    // Start the speed test
     const startTime = new Date().getTime();
-    fetch('assets/testfile') // Replace with a valid file URL
+    const imageUrl = 'https://www.gstatic.com/webp/gallery/1.jpg'; // A sample image for testing
+    const downloadSize = 5000000; // Size of the test file in bytes (5 MB)
+    
+    fetch(imageUrl)
         .then(response => response.blob())
         .then(blob => {
             const endTime = new Date().getTime();
-            const duration = (endTime - startTime) / 1000; // in seconds
-            const fileSize = blob.size; // in bytes
-            const speed = (fileSize / duration) / (1024 * 1024); // in Mbps
-            document.getElementById('result').innerText = `Speed: ${speed.toFixed(2)} Mbps`;
-            updateAnalogMeter(speed);
+            const duration = (endTime - startTime) / 1000; // Duration in seconds
+            const bitsLoaded = downloadSize * 8; // Convert bytes to bits
+            const speedMbps = (bitsLoaded / duration / 1000000).toFixed(2); // Speed in Mbps
+
+            speedValue.innerText = speedMbps; // Display speed
+            status.innerText = 'Test completed!';
         })
         .catch(error => {
-            document.getElementById('result').innerText = 'Test failed. Please try again.';
-            console.error('Error fetching the file:', error);
+            console.error('Error:', error);
+            speedValue.innerText = 'Error';
+            status.innerText = 'Test failed. Please try again.';
         });
 });
-
-function updateAnalogMeter(speed) {
-    const maxSpeed = 100; // Maximum speed for the meter
-    const angle = (speed / maxSpeed) * 180; // Scale the speed to an angle
-    const needle = document.getElementById('needle');
-    needle.style.transform = `rotate(${angle - 90}deg)`; // Adjust for rotation
-}
