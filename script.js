@@ -9,7 +9,6 @@ document.getElementById('startTest').addEventListener('click', function() {
     // Simulate Download Test
     const imageUrl = 'https://www.gstatic.com/webp/gallery/1.jpg'; // Sample image for testing
     const downloadStartTime = new Date().getTime();
-    let downloadedBytes = 0;
 
     // Create an image element to measure download speed
     const downloadImage = new Image();
