@@ -4,19 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internet Speed Test</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #speedMeter {
+            transition: width 0.5s;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Internet Speed Test</h1>
-        <div class="meter-container">
-            <div class="meter">
-                <div class="needle" id="needle"></div>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h1 class="text-2xl font-bold text-center mb-4">Internet Speed Test</h1>
+        <div class="flex justify-center mb-4">
+            <div class="relative">
+                <div class="w-32 h-32 rounded-full border-8 border-blue-500 flex items-center justify-center">
+                    <span id="speedValue" class="text-3xl font-bold">0</span>
+                    <span class="absolute bottom-0 text-xs">Mbps</span>
+                </div>
             </div>
         </div>
-        <button id="startTest">Start Test</button>
-        <div id="result" class="result"></div>
+        <button id="startTest" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Start Test</button>
+        <div id="status" class="text-center mt-4"></div>
     </div>
-    <script src="script.js"></script>
+
+    <script src="speedTest.js"></script>
 </body>
 </html>
