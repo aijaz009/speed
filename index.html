@@ -5,17 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internet Speed Test</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f3f4f6;
+        }
+        .meter {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 10px solid #3b82f6;
+            position: relative;
+            margin: 0 auto;
+            background: conic-gradient(#3b82f6 0%, #e5e7eb 0%);
+        }
+        .meter .value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .status {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
+<body class="flex items-center justify-center h-screen">
     <div class="bg-white p-8 rounded-lg shadow-lg w-96">
         <h1 class="text-2xl font-bold text-center mb-4">Internet Speed Test</h1>
-        <div id="results" class="text-center mb-4">
-            <p id="pingResult">Ping: <span id="pingValue">0</span> ms</p>
-            <p id="downloadResult">Download: <span id="downloadValue">0</span> Mbps</p>
-            <p id="uploadResult">Upload: <span id="uploadValue">0</span> Mbps</p>
+        <div class="meter" id="speedMeter">
+            <div class="value" id="speedValue">0</div>
         </div>
-        <button id="startTest" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Start Test</button>
-        <div id="status" class="text-center mt-4"></div>
+        <button id="startTest" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 mt-4">Start Test</button>
+        <div id="status" class="status text-center mt-4"></div>
     </div>
 
     <script src="speedTest.js"></script>
