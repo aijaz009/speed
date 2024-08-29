@@ -1,38 +1,55 @@
-document.getElementById('startTest').addEventListener('click', function() {
-    const speedValue = document.getElementById('speedValue');
-    const status = document.getElementById('status');
-    const speedMeter = document.getElementById('speedMeter');
+const startTestButton = document.getElementById('start-test');
+const testResultsContainer = document.getElementById('test-results');
 
-    speedValue.innerText = '0';
-    status.innerText = 'Testing...';
-
-    // Simulate Download Test
-    const imageUrl = 'https://www.gstatic.com/webp/gallery/1.jpg'; // Sample image for testing
-    const downloadStartTime = new Date().getTime();
-
-    // Create an image element to measure download speed
-    const downloadImage = new Image();
-    downloadImage.src = imageUrl;
-
-    downloadImage.onload = () => {
-        const downloadEndTime = new Date().getTime();
-        const duration = (downloadEndTime - downloadStartTime) / 1000; // seconds
-        const fileSize = 5000000; // Size of the image in bytes (5 MB)
-        const speedMbps = (fileSize * 8 / duration / 1000000).toFixed(2); // Convert to Mbps
-
-        // Update speed value and meter
-        updateSpeedMeter(speedMbps);
-        speedValue.innerText = speedMbps;
-        status.innerText = 'Download test completed!';
+startTestButton.addEventListener('click', () => {
+    // Send HTTP request to download a file
+    const downloadRequest = new XMLHttpRequest();
+    downloadRequest.open('GET', 'download-test-file.txt', true);
+    downloadRequest.onload = () => {
+        const downloadTime = downloadRequest.responseText;
+        const downloadSpeed = calculateDownloadSpeed(downloadTime);
+        displayTestResult('Download Speed:', downloadSpeed);
     };
+    downloadRequest.send();
 
-    downloadImage.onerror = () => {
-        speedValue.innerText = 'Error';
-        status.innerText = 'Download test failed.';
+    // Send HTTP request to upload a file
+    const uploadRequest = new XMLHttpRequest();
+    uploadRequest.open('POST', 'upload-test-file.txt', true);
+    uploadRequest.onload = () => {
+        const uploadTime = uploadRequest.responseText;
+        const uploadSpeed = calculateUploadSpeed(uploadTime);
+        displayTestResult('Upload Speed:', uploadSpeed);
     };
+    uploadRequest.send();
 
-    function updateSpeedMeter(speed) {
-        const percentage = Math.min(speed / 100, 1) * 100; // Cap at 100 Mbps
-        speedMeter.style.background = `conic-gradient(#3b82f6 ${percentage}%, #e5e7eb ${percentage}%)`;
-    }
+    // Measure ping
+    const pingRequest = new XMLHttpRequest();
+    pingRequest.open('GET', 'ping-test.txt', true);
+    pingRequest.onload = () => {
+        const pingTime = pingRequest.responseText;
+        const ping = calculatePing(pingTime);
+        displayTestResult('Ping:', ping);
+    };
+    pingRequest.send();
 });
+
+function calculateDownloadSpeed(downloadTime) {
+    // Calculate download speed based on the time it took to download the file
+    return downloadTime / 1024; // Convert to kilobits per second
+}
+
+function calculateUploadSpeed(uploadTime) {
+    // Calculate upload speed based on the time it took to upload the file
+    return uploadTime / 1024; // Convert to kilobits per second
+}
+
+function calculatePing(pingTime) {
+    // Calculate ping based on the time it took to receive the response
+    return pingTime / 1000; // Convert to milliseconds
+}
+
+function displayTestResult(label, value) {
+    const testResultElement = document.createElement('p');
+    testResultElement.textContent = `${label} ${value} `;
+    testResultsContainer.appendChild(testResultElement);
+}
