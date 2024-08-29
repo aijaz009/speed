@@ -1,21 +1,11 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
-app.get('/download-test-file.txt', (req, res) => {
-    // Serve the download test file
-    res.sendFile(__dirname + '/download-test-file.txt');
-});
+app.use(express.static(path.join(__dirname, '.')));
 
-app.post('/upload-test-file.txt', (req, res) => {
-    // Handle the upload test file
-    const uploadTime = req.body.uploadTime;
-    // Store the upload time in a database or file
-    res.send(`Upload time: ${uploadTime}`);
-});
-
-app.get('/ping-test.txt', (req, res) => {
-    // Serve the ping test file
-    res.sendFile(__dirname + '/ping-test.txt');
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(3000, () => {
