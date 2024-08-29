@@ -1,14 +1,20 @@
-const express = require('express');
-const app = express();
-const path = require('path');
+const http = require('http');
 const fs = require('fs');
+const path = require('path');
 
-app.use(express.static(path.join(__dirname, '.')));
+const indexPath = path.join(__dirname, 'index.html');
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.listen(3000, () => {
-    console.log('Server started on port 3000');
+http.createServer((req, res) => {
+  fs.readFile(indexPath, (err, data) => {
+    if (err) {
+      console.error(`Error reading file: ${err}`);
+      res.writeHead(404);
+      res.end('Error: File not found');
+    } else {
+      res.writeHead(200, {'Content-Type': 'text/html'});
+      res.end(data);
+    }
+  });
+}).listen(3000, () => {
+  console.log('Server started on port 3000');
 });
